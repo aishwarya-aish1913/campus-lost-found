@@ -1,0 +1,11 @@
+*.exe
+*.dll
+*.jmod
+*.jsa
+*.sym
+*.zip
+modules
+jdk*
+jre*
+*.class
+bin
