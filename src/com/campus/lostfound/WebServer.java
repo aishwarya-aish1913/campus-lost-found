@@ -586,8 +586,8 @@ public class WebServer {
                 Map<String, String> map = parseJson(readRequestBody(exchange));
                 try (Connection conn = getConnection();
                      PreparedStatement stmt = conn.prepareStatement("SELECT user_id, name, email, stars FROM users WHERE email=? AND password=?")) {
-                    stmt.setString(1, map.get("email"));
-                    stmt.setString(2, map.get("password"));
+                    stmt.setString(1, map.get("email") != null ? map.get("email").trim() : "");
+                    stmt.setString(2, map.get("password") != null ? map.get("password").trim() : "");
                     try (ResultSet rs = stmt.executeQuery()) {
                         if (rs.next()) {
                             sendResponse(exchange, 200, String.format("{\"success\":true,\"user\":{\"userId\":%d,\"name\":\"%s\",\"email\":\"%s\",\"stars\":%d}}",
@@ -609,7 +609,7 @@ public class WebServer {
                 try (Connection conn = getConnection();
                      PreparedStatement stmt = conn.prepareStatement("INSERT INTO users (name, email, password, stars) VALUES (?, ?, ?, 0)", Statement.RETURN_GENERATED_KEYS)) {
                     stmt.setString(1, map.get("name"));
-                    stmt.setString(2, map.get("email"));
+                    stmt.setString(2, map.get("email") != null ? map.get("email").trim() : "");
                     stmt.setString(3, map.get("password"));
                     stmt.executeUpdate();
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -704,7 +704,7 @@ public class WebServer {
                             .append("\"holderName\":\"").append(escapeJson(rs.getString("holder_name"))).append("\",")
                             .append("\"description\":\"").append(escapeJson(rs.getString("description"))).append("\",")
                             .append("\"finderStars\":").append(rs.getInt("finder_stars")).append(",")
-                            .append("\"imageData\":\"").append(rs.getString("image_data")).append("\"")
+                            .append("\"imageData\":\"").append(rs.getString("image_data") != null ? rs.getString("image_data").replace("\r", "").replace("\n", "") : "").append("\"")
                             .append("}");
                 }
                 sb.append("]");
