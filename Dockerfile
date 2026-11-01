@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY . .
-RUN javac -cp ".:lib/*" -d . src/com/campus/lostfound/*.java
+RUN find src -name "*.java" > sources.txt && javac -cp ".:lib/*" -d . @sources.txt
 EXPOSE 8080
 CMD ["java", "-cp", ".:lib/*", "com.campus.lostfound.WebServer"]
