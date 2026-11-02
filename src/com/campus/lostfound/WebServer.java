@@ -686,9 +686,9 @@ public class WebServer {
         public void handle(HttpExchange exchange) throws IOException {
             try (Connection conn = getConnection();
                  Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT i.item_id, i.user_id, i.item_name, i.category, i.location, i.holder_name, i.description, i.image_data, u.stars AS finder_stars " +
-                         "FROM items i LEFT JOIN users u ON i.user_id = u.user_id " +
-                         "WHERE i.item_type='FOUND' AND i.image_data IS NOT NULL AND i.image_data != '' ORDER BY i.item_id DESC")) {
+                 ResultSet rs = stmt.executeQuery("SELECT i.id AS item_id, i.user_id, i.item_name, i.category, i.location, i.holder_name, i.description, i.image_data, u.stars AS finder_stars " +
+                         "FROM items i LEFT JOIN users u ON i.user_id = u.id " +
+                         "WHERE i.item_type='FOUND' AND i.image_data IS NOT NULL AND i.image_data != '' ORDER BY i.id DESC")) {
 
                 StringBuilder sb = new StringBuilder("[");
                 boolean first = true;
