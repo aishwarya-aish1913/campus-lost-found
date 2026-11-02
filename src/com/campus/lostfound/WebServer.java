@@ -47,14 +47,14 @@ public class WebServer {
     private static void initDatabase() {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
-                    "user_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(100) NOT NULL, " +
                     "email VARCHAR(120) NOT NULL UNIQUE, " +
                     "password VARCHAR(100) NOT NULL, " +
                     "stars INT DEFAULT 0)");
 
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS items (" +
-                    "item_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "user_id INT, " +
                     "item_name VARCHAR(120) NOT NULL, " +
                     "item_type VARCHAR(20) NOT NULL, " +
@@ -822,7 +822,7 @@ public class WebServer {
                 int finderId = Integer.parseInt(map.get("finderId"));
 
                 try (Connection conn = getConnection()) {
-                    try (PreparedStatement stmt = conn.prepareStatement("UPDATE users SET stars = stars + 1 WHERE user_id=?")) {
+                    try (PreparedStatement stmt = conn.prepareStatement("UPDATE users SET stars = COALESCE(stars, 0) + 1 WHERE id=?")) {
                         stmt.setInt(1, finderId);
                         stmt.executeUpdate();
                     }
