@@ -585,7 +585,7 @@ public class WebServer {
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 Map<String, String> map = parseJson(readRequestBody(exchange));
                 try (Connection conn = getConnection();
-                     PreparedStatement stmt = conn.prepareStatement("SELECT user_id, name, email, stars FROM users WHERE email=? AND password=?")) {
+                     PreparedStatement stmt = conn.prepareStatement("SELECT id AS user_id, name, email, COALESCE(stars, 0) AS stars FROM users WHERE email=? AND password=?")) {
                     stmt.setString(1, map.get("email") != null ? map.get("email").trim() : "");
                     stmt.setString(2, map.get("password") != null ? map.get("password").trim() : "");
                     try (ResultSet rs = stmt.executeQuery()) {
