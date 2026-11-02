@@ -747,8 +747,8 @@ public class WebServer {
 
                 try (Connection conn = getConnection()) {
                     String sql = type.equals("finder")
-                            ? "SELECT r.request_id, r.item_id, r.loser_id, r.secret_mark, r.status, i.item_name, u.name AS loser_name, u.email AS loser_email FROM claim_requests r JOIN items i ON r.item_id=i.item_id JOIN users u ON r.loser_id=u.user_id WHERE r.finder_id=? AND r.status='PENDING'"
-                            : "SELECT r.request_id, r.item_id, r.finder_id, r.handover_place, r.status, r.is_appreciated, i.item_name, u.name AS finder_name FROM claim_requests r JOIN items i ON r.item_id=i.item_id JOIN users u ON r.finder_id=u.user_id WHERE r.loser_id=? ORDER BY r.request_id DESC";
+                            ? "SELECT r.request_id, r.item_id, r.loser_id, r.secret_mark, r.status, i.item_name, u.name AS loser_name, u.email AS loser_email FROM claim_requests r JOIN items i ON r.item_id=i.id JOIN users u ON r.loser_id=u.id WHERE r.finder_id=? AND r.status='PENDING'"
+                            : "SELECT r.request_id, r.item_id, r.finder_id, r.handover_place, r.status, r.is_appreciated, i.item_name, u.name AS finder_name FROM claim_requests r JOIN items i ON r.item_id=i.id JOIN users u ON r.finder_id=u.id WHERE r.loser_id=? ORDER BY r.request_id DESC";
 
                     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                         stmt.setInt(1, userId);
